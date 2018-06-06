@@ -1,12 +1,4 @@
 {
-    "addons": [
-        {
-            "plan": "heroku-postgresql",
-            "options": {
-              "version": "9.6"
-            }
-        }
-    ],
     "env": {
         "ADMIN_USER": {
             "description": "管理者ユーザID",
