@@ -1,3 +1,0 @@
-admin.product.category.index.initialize:
-    - [onAdminProductCategoryIndexInit, NORMAL]
-
