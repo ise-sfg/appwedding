@@ -32,3 +32,4 @@ image_save_urlpath: /upload/save_image
 image_temp_urlpath: /upload/temp_image
 user_data_urlpath: /user_data
 plugin_urlpath: /plugin
+
