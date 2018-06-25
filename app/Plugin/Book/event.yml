@@ -1,0 +1,4 @@
+front.product.detail.complete:
+    - [onProductDetailComplete, NORMAL]
+front.product.detail.initialize:
+    - [onProductDetailInit, NORMAL]

@@ -30,6 +30,7 @@ use Symfony\Component\Yaml\Yaml;
 
 $allow = array(
     '127.0.0.1',
+    '192.168.56.1',
     'fe80::1',
     '::1',
 );

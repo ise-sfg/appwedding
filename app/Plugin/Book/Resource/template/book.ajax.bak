@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<title>jQuery TIPS</title>
+	<style>
+		body {
+			font-size: 20px;
+		}
+
+		input {
+			margin-top: 10px;
+			font-size: 20px;
+			height: 32px;
+		}
+	</style>
+</head>
+
+<body>
+	<form id="myForm">
+		<div>
+			<input id="text-name" type="text" value="" />
+		</div>
+		<div>
+			<input id="get-info" type="button" value="取得" />
+		</div>
+		<div id="result">
+		</div>
+	</form>
+	<script type="text/javascript" src="plugin/book/js/jquery-3.3.1.min.js"></script>
+	<script>
+		$(function () {
+			$("#get-info").click(function () {
+				var postData = {};
+				postData["name"] = $("#text-name").val();
+				getInfo(postData);
+			});
+		});
+		function getInfo(postData) {
+			$.ajax({
+				type: "POST",
+				url: "/getinfo",
+				data: postData,
+				dataType: "json",
+			}).done(function (data) {
+				showResult(data);
+				return true;
+			}).fail(function (data) {
+				alert('更新に失敗しました。入力内容を確認してください。');
+				return false;
+			}).always(function (data) {
+			});
+		}
+		function showResult(data) {
+			$("#result").empty();
+			var html = '<div>' + data.name + '</div>';
+			html += '<div>' + data.color + '</div>';
+			html += '<div>' + data.pear + '</div>';
+			$("#result").append(html);
+		}
+	</script>
+</body>
+
+</html>

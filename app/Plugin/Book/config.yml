@@ -1,0 +1,9 @@
+name: Book
+code: Book
+version: 1.0.0
+orm.path:
+    - /Resource/doctrine
+event: BookEvent
+service:
+    - BookServiceProvider
+

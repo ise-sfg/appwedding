@@ -23,6 +23,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 {% set body_class = 'front_page' %}
 
+{% block stylesheet %}
+<style>
+	#open-book {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+</style>
+{% endblock %}
+
 {% block javascript %}
 <script>
 $(function(){
@@ -37,7 +46,7 @@ $(function(){
 {% endblock %}
 
 {% block main %}
-<button type="submit" id="add-cart" class="btn btn-primary btn-block prevention-btn prevention-mask">ブックを開く</button>
+<a id="open-book" href="/bookpage" class="btn btn-primary btn-block">ブックを開く</a>
     <div class="row">
        <div class="col-sm-12">
             <div class="main_visual">

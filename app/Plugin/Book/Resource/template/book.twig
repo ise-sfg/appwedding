@@ -1,0 +1,429 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=0.98">
+	<script type="text/javascript" src="plugin/book/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="plugin/book/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="plugin/book/js/jquery.mousewheel.min.js"></script>
+	<script type="text/javascript" src="plugin/book/js/modernizr.2.5.3.min.js"></script>
+	<script type="text/javascript" src="plugin/book/js/hash.js"></script>
+	<style>
+		.book-tab ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		.book-tab li {
+			display: inline;
+			padding: 0;
+			margin: 0;
+		}
+
+		.book-tab li a {
+			display: block;
+			border: 1px solid #9F99A3;
+			background-color: #EEEEEE;
+			padding: 3px 10px;
+			text-decoration: none;
+			color: #333;
+			width: 150px;
+			margin: 2px 0px;
+			text-align: left;
+			font-size: 14px;
+		}
+
+		.book-tab li a:hover {
+			border: 1px solid #8593A9;
+			background-color: #9EB7DD;
+		}
+
+		.grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+		}
+
+		.book-tab {
+			display: none;
+		}
+
+		button {
+			width: 6rem;
+			height: 2rem;
+			font-size: 18px;
+		}
+
+		.ui-dialog {
+			z-index: 15000 !important;
+		}
+
+		.no-titlebar .ui-dialog-titlebar {
+			display: none;
+		}
+
+		.sj-book .book-content {
+			margin-top: 10px;
+		}
+
+		.sj-book .book-content .center-pic img {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+
+<body>
+
+
+	<div id="canvas" class="grid2">
+		<div id="book-zoom" class="grid">
+			<div class="sj-book">
+				<div depth="5" class="hard">
+					<div class="side"></div>
+				</div>
+				<div depth="5" class="hard front-side">
+					<div class="depth"></div>
+				</div>
+				<div class="hard fixed back-side p111">
+					<div class="depth"></div>
+				</div>
+				<div class="hard p112"></div>
+			</div>
+		</div>
+		<div id="slider-bar" class="turnjs-slider">
+			<div id="slider"></div>
+		</div>
+		<div id="button-area" style="text-align: center;">
+			<button id="move-p1">P1</button>
+			<button id="move-p6">P6</button>
+			<button id="move-p51">P51</button>
+			<button id="move-p112">P112</button>
+			<input type="text" style="margin-left: 2rem; height: 1.8rem; width: 3rem;" id="text-move" value="" />
+			<button id="button-move">移動</button>
+		</div>
+	</div>
+
+	<div id="dialog01" style="display:none;">
+		<p>ウィンドウ01</p>
+		<label for="username">お名前：</label><input name="name" id="username">
+	</div>
+
+	<script type="text/javascript">
+		$(function () {
+			$("#button-move").click(function (event) {
+				var pg = $("#text-move").val();
+				$('.sj-book').turn('page', pg);
+			});
+			$("#move-p1").click(function (event) {
+				$('.sj-book').turn('page', 1);
+			});
+			$("#move-p6").click(function (event) {
+				$('.sj-book').turn('page', 6);
+				//		openDialog01();
+				//		setTimeout(openDialog01, 1500);
+			});
+			$("#move-p51").click(function (event) {
+				$('.sj-book').turn('page', 51);
+			});
+			$("#move-p112").click(function (event) {
+				$('.sj-book').turn('page', 112);
+			});
+
+			$(".sj-book").on('click', '#open-window', function () {
+				openDialog01();
+			});
+
+			$('.sj-book').bind("turning", function (event, page, view) {
+				//		var off = $('.sj-book .p1').offset();
+				//		alert("nnnn " + off.left);
+				//	  alert("Turning the page to: " + page);
+			});
+		});
+
+		function openDialog01() {
+			$("#dialog01").dialog({
+				modal: true,
+				width: 1000,
+				height: 680,
+				dialogClass: "no-titlebar",
+				title: "ウィンドウ01", //タイトル
+
+				position: {
+					of: 'body',
+					at: 'center top',
+					my: 'center top-20'
+				},
+
+				buttons: { //ボタン
+					"閉じる": function () {
+						$(this).dialog("close");
+					}
+				}
+			});
+		}
+
+		function loadApp() {
+
+			var flipbook = $('.sj-book');
+
+			// Check if the CSS was already loaded
+
+			if (flipbook.width() == 0 || flipbook.height() == 0) {
+				setTimeout(loadApp, 10);
+				return;
+			}
+
+			// Mousewheel
+
+			$('#book-zoom').mousewheel(function (event, delta, deltaX, deltaY) {
+
+				var data = $(this).data(),
+					step = 30,
+					flipbook = $('.sj-book'),
+					actualPos = $('#slider').slider('value') * step;
+
+				if (typeof (data.scrollX) === 'undefined') {
+					data.scrollX = actualPos;
+					data.scrollPage = flipbook.turn('page');
+				}
+
+				data.scrollX = Math.min($("#slider").slider('option', 'max') * step,
+					Math.max(0, data.scrollX + deltaX));
+
+				var actualView = Math.round(data.scrollX / step),
+					page = Math.min(flipbook.turn('pages'), Math.max(1, actualView * 2 - 2));
+
+				if ($.inArray(data.scrollPage, flipbook.turn('view', page)) == -1) {
+					data.scrollPage = page;
+					flipbook.turn('page', page);
+				}
+
+				if (data.scrollTimer)
+					clearInterval(data.scrollTimer);
+
+				data.scrollTimer = setTimeout(function () {
+					data.scrollX = undefined;
+					data.scrollPage = undefined;
+					data.scrollTimer = undefined;
+				}, 1000);
+
+			});
+
+			// Slider
+
+			$("#slider").slider({
+				min: 1,
+				max: 100,
+
+				start: function (event, ui) {
+
+					if (!window._thumbPreview) {
+						_thumbPreview = $('<div />', { 'class': 'thumbnail' }).html('<div></div>');
+						//				setPreview(ui.value);
+						_thumbPreview.appendTo($(ui.handle));
+					}
+					//			} else
+					//				setPreview(ui.value);
+
+					moveBar(false);
+
+				},
+
+				slide: function (event, ui) {
+
+					//			setPreview(ui.value);
+
+				},
+
+				stop: function () {
+
+					if (window._thumbPreview)
+						_thumbPreview.removeClass('show');
+
+					$('.sj-book').turn('page', Math.max(1, $(this).slider('value') * 2 - 2));
+
+				}
+			});
+
+
+			// URIs
+			Hash.on('^page\/([0-9]*)$', {
+				yep: function (path, parts) {
+
+					var page = parts[1];
+
+					if (page !== undefined) {
+						if ($('.sj-book').turn('is'))
+							$('.sj-book').turn('page', page);
+					}
+
+				},
+				nop: function (path) {
+
+					if ($('.sj-book').turn('is'))
+						$('.sj-book').turn('page', 1);
+				}
+			});
+
+			// Arrows
+			$(document).keydown(function (e) {
+
+				var previous = 37, next = 39;
+
+				switch (e.keyCode) {
+					case previous:
+
+						$('.sj-book').turn('previous');
+
+						break;
+					case next:
+
+						$('.sj-book').turn('next');
+
+						break;
+				}
+
+			});
+
+
+			// Flipbook
+
+			flipbook.bind(($.isTouch) ? 'touchend' : 'click', zoomHandle);
+
+			flipbook.turn({
+				elevation: 50,
+				acceleration: !isChrome(),
+				autoCenter: true,
+				gradients: true,
+				duration: 1000,
+				pages: 112,
+				when: {
+					turning: function (e, page, view) {
+
+						var book = $(this),
+							currentPage = book.turn('page'),
+							pages = book.turn('pages');
+
+						if (currentPage > 3 && currentPage < pages - 3) {
+
+							if (page == 1) {
+								book.turn('page', 2).turn('stop').turn('page', page);
+								e.preventDefault();
+								return;
+							} else if (page == pages) {
+								book.turn('page', pages - 1).turn('stop').turn('page', page);
+								e.preventDefault();
+								return;
+							}
+						} else if (page > 3 && page < pages - 3) {
+							if (currentPage == 1) {
+								book.turn('page', 2).turn('stop').turn('page', page);
+								e.preventDefault();
+								return;
+							} else if (currentPage == pages) {
+								book.turn('page', pages - 1).turn('stop').turn('page', page);
+								e.preventDefault();
+								return;
+							}
+						}
+
+						updateDepth(book, page);
+
+						if (page >= 2)
+							$('.sj-book .p2').addClass('fixed');
+						else
+							$('.sj-book .p2').removeClass('fixed');
+
+						if (page < book.turn('pages'))
+							$('.sj-book .p111').addClass('fixed');
+						else
+							$('.sj-book .p111').removeClass('fixed');
+
+						Hash.go('page/' + page).update();
+
+					},
+
+					turned: function (e, page, view) {
+
+						var book = $(this);
+
+						if (page == 2 || page == 3) {
+							book.turn('peel', 'br');
+						}
+
+						updateDepth(book);
+
+						$('#slider').slider('value', getViewNumber(book, page));
+
+						book.turn('center');
+
+					},
+
+					start: function (e, pageObj) {
+
+						moveBar(true);
+
+					},
+
+					end: function (e, pageObj) {
+
+						var book = $(this);
+
+						updateDepth(book);
+
+						setTimeout(function () {
+
+							$('#slider').slider('value', getViewNumber(book));
+
+						}, 1);
+
+						moveBar(false);
+
+					},
+
+					missing: function (e, pages) {
+
+						for (var i = 0; i < pages.length; i++) {
+							addPage(pages[i], $(this));
+						}
+
+					}
+				}
+			});
+
+
+			$('#slider').slider('option', 'max', numberOfViews(flipbook));
+
+			flipbook.addClass('animated');
+
+			// Show canvas
+
+			$('#canvas').css({ visibility: '' });
+		}
+
+		// Hide canvas
+
+		$('#canvas').css({ visibility: 'hidden' });
+
+		// Load turn.js
+
+		yepnope({
+			test: Modernizr.csstransforms,
+			yep: ['plugin/book/js/turn.min.js'],
+			nope: ['plugin/book/js/turn.html4.min.js', 'plugin/book/css/jquery.ui.html4.css', 'plugin/book/css/steve-jobs-html4.css'],
+			both: ['plugin/book/js/steve-jobs.js', 'plugin/book/css/jquery-ui.min.css', 'plugin/book/css/steve-jobs.css'],
+			complete: loadApp
+		});
+
+	</script>
+
+</body>
+
+</html>

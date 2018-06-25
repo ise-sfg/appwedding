@@ -4,7 +4,7 @@ composer.phar
 /vendor/
 /app/cache/*
 !/app/cache/.gitkeep
-#/app/config/eccube/*
+/app/config/eccube/*
 !/app/config/eccube/.gitkeep
 /app/log/*
 !/app/log/.gitkeep

@@ -1,0 +1,20 @@
+Plugin\Book\Entity\PlgOrderDetail:
+    type: entity
+    table: plg_order_detail
+    repositoryClass: Plugin\Book\Repository\PlgOrderDetailRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            column: order_detail_id
+            generator:
+                strategy: NONE
+    fields:
+        status:
+            type: integer
+            nullable: true
+    lifecycleCallbacks: {  }
+
