@@ -23,6 +23,46 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 {% set body_class = 'cart_page' %}
 
+{% block stylesheet %}
+<style>
+	.order-status {
+        color: #000000;
+        font-weight: bold;
+        text-align: center;
+        width: 100px;
+		background-color: #87cafa;
+	}
+	.order-status-prov {
+        color: #000000;
+        font-weight: bold;
+        text-align: center;
+        width: 100px;
+		background-color: #ffd700;
+	}
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(function(){
+    $('.update_order_prov').click(function() {
+        var id = $(this).attr('id');
+        var classId = id.split('--')[1];
+        $('#productVlassId').val(classId);
+        $('#orderStatus').val('1');
+        $('#form_order_status').submit();
+    });
+    $('.update_order').click(function() {
+        var id = $(this).attr('id');
+        var classId = id.split('--')[1];
+        $('#productVlassId').val(classId);
+        $('#orderStatus').val('2');
+        $('#form_order_status').submit();
+    });
+});
+</script>
+{% endblock %}
+
 {% block main %}
     <h1 class="page-heading">ショッピングカートです。。。</h1>
 {#    {{ dump(app.session.get('bookCart')) }}   #}
@@ -103,7 +143,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
                     {# *** 独自セッションオブジェクト取得 #}
                     {% set BookCart = app.session.get('bookCart') %}
-                    {{ dump(BookCart) }}
+                    {# {{ dump(BookCart) }} #}
 
                     <div id="cart_item_list" class="cart_item table">
                         <div class="thead">
@@ -121,7 +161,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                 {% set Product = ProductClass.Product %}
 
                                 {% set orderStatus = BookCart.getCartItem(ProductClass.id).getStatus() %}
-                                {{ dump(orderStatus) }}
+                                {# {{ dump(orderStatus) }} #}
                                 
                                 <div id="cart_item_list__item--{{ ProductClass.id }}" class="item_box tr">
                                     <div id="cart_item_list__cart_remove--{{ ProductClass.id }}" class="icon_edit td">
@@ -136,6 +176,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                             </a>
                                         </div>
                                         <dl class="item_detail">
+                                            {# ********************************* #}
+                                            {% if orderStatus == '1' %}
+                                                <div class="order-status-prov">仮予約</div>
+                                            {% else %}
+                                                <div class="order-status">予約</div>
+                                            {% endif %}
+                                            {# ********************************* #}
                                             <dt id="cart_item_list__product_detail--{{ ProductClass.id }}" class="item_name text-default">
                                                 <a target="_self" href="{{ url('product_detail', {id : Product.id} ) }}">{{ Product.name }}</a>
                                             </dt>
@@ -149,6 +196,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                             </dd>
                                             <dd id="cart_item_list__item_price--{{ ProductClass.id }}" class="item_price">￥{{ CartItem.price|number_format }}</dd>
                                             <dd id="cart_item_list__item_subtotal--{{ ProductClass.id }}" class="item_subtotal">小計：￥{{ CartItem.total_price|number_format }}</dd>
+                                            {# ********************************* #}
+                                            {% if orderStatus == '1' %}
+                                                <a id="update_status--{{ ProductClass.id }}" class="update_order btn btn-primary btn-xs btn-block">予約</a>
+                                            {% else %}
+                                                <a id="update_status--{{ ProductClass.id }}" class="update_order_prov btn btn-primary btn-xs btn-block">仮予約</a>
+                                            {% endif %}
+                                            {# ********************************* #}
+                                            
                                         </dl>
                                     </div>
                                     <div id="cart_item_list__quantity--{{ ProductClass.id }}" class="item_quantity td">
@@ -188,6 +243,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         </div>
                     </div>
 
+                </form>
+                <form id="form_order_status" method="post" action="/updateOrderStatus">
+                    <input id="orderStatus" name="orderStatus" type="hidden" />
+                    <input id="productVlassId" name="productVlassId" type="hidden" />
                 </form>
                 {% else %}
                 <div id="cart_box__message" class="message">

@@ -1,0 +1,46 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=0.98">
+	<script type="text/javascript" src="plugin/book/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="plugin/book/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="plugin/book/js/jquery.mousewheel.min.js"></script>
+	<script type="text/javascript" src="plugin/book/js/modernizr.2.5.3.min.js"></script>
+	<script type="text/javascript" src="plugin/book/js/hash.js"></script>
+	<style>
+		#image01 {
+			max-width: 800px;
+			max-height: 1000px;
+			border: solid 2px #ff0000;
+		}
+	</style>
+</head>
+
+<body>
+
+	画像アップロード
+	<form name="form_upload" id="form_upload" method="post" enctype="multipart/form-data" action="/douploadimage">
+
+		<p><input type="file" name="file_upload" size="80px" id="upload" accept="image/*"></p>
+		<p><input type="submit" name="submit" value="Upload" /></p>
+	
+	</form>
+
+	<img id="image01" src="/plugin/book/upload/001.jpg" />
+		
+	<script type="text/javascript">
+		$(function () {
+		});
+
+	</script>
+
+</body>
+
+</html>

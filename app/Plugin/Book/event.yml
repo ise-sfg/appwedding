@@ -2,3 +2,7 @@ front.product.detail.complete:
     - [onProductDetailComplete, NORMAL]
 front.product.detail.initialize:
     - [onProductDetailInit, NORMAL]
+front.cart.remove.complete:
+    - [onCartRemoveComplete, NORMAL]
+front.shopping.confirm.complete:
+    - [onShoppingConfirmComplete, NORMAL]

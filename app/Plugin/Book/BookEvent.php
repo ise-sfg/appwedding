@@ -51,6 +51,7 @@ class BookEvent
         $builder->get(self::ORDER_STATUS_ITEM_NAME)->setData('xyz');
     }
 
+    // 商品詳細
     public function onProductDetailComplete(EventArgs $event)
     {
         $product = $event->getArgument('Product');
@@ -89,5 +90,19 @@ class BookEvent
         // log_info($productClassId);
         // log_info($product->getName());
         // log_info($form['mode']->getData());
+    }
+
+    // カートの商品を削除
+    public function onCartRemoveComplete(EventArgs $event)
+    {
+        $productClassId = $event->getArgument('productClassId');
+        $this->bookCart->removeCartItem($productClassId);
+    }
+
+    // 購入完了
+    public function onShoppingConfirmComplete(EventArgs $event)
+    {
+        $order = $event->getArgument('Order');
+        dump($order);
     }
 }

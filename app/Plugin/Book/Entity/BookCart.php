@@ -51,5 +51,17 @@ class BookCart extends \Eccube\Entity\AbstractEntity
         return $this->CartItems[$classId];
     }
 
+    public function setStatus($classId, $status)
+    {
+        $cartItem = $this->CartItems[$classId];
+        $cartItem->setStatus($status);
+    }
+
+    public function removeCartItem($classId)
+    {
+        $cartItem = $this->CartItems[$classId];
+        unset($this->CartItems[$classId]);
+    }
+
 }
 
